@@ -10,3 +10,6 @@ get youtube channel playlist &amp; playlist items easily :)
 ## REFERENCE
 
 - [developers.google.com-youtube](https://developers.google.com/youtube/v3/docs/?apix=true)
+- [[기타]개발 관련 추천 유튜브 채널 모음](https://roadofdevelopment.tistory.com/67?category=463231)
+
+https://www.youtube.com/watch?v=_kAoKkdT-ew&list=PLuHgQVnccGMDvLEhqKQHhHxssO9I1hxsR

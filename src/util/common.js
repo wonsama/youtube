@@ -1,6 +1,8 @@
 // see more
 // https://developers.google.com/youtube/v3/docs/playlists
 // https://developers.google.com/youtube/v3/docs/playlistItems
+// https://developers.google.com/youtube/v3/docs/search
+// https://console.cloud.google.com/apis/api/youtube.googleapis.com/
 
 require("dotenv").config();
 const axios = require("axios").default;
@@ -16,34 +18,62 @@ const YT_PLAYLISTS = `https://www.googleapis.com/youtube/v3/playlists`;
 const YT_PLAYLISTITEMS = `https://www.googleapis.com/youtube/v3/playlistItems`;
 
 /**
- * YouTube Data API v3 호출 시 사용되는 기본 파라미터
+ * SEARCH API URI
  */
-let params = {
+const YT_SEARCH = `https://www.googleapis.com/youtube/v3/search`;
+
+/**
+ * 기본 파라미터
+ */
+let paramDefault = {
   // YouTube Data API v3 키
-  // https://console.cloud.google.com/apis/api/youtube.googleapis.com/
-  // 위 링크를 통해 발급 받을 수 있음
   key: process.env.API_KEY,
 
   // 필수
   // playlists : id or snippet or status
   // playlistItems : id or snippet or status or contentDetails
+  // search : id or snippet
   part: "snippet",
-
-  // 필터 : channelId
-  // use in playlists only
-  channelId: process.env.CHANNEL_ID,
-
-  // 필터 : playlistId
-  // use in playlistItems only
-  playlistId: process.env.PLAY_LIST_ID,
 
   // 선택적 매개변수
   maxResults: 50, // 최대 50, 기본 5
 };
 
-function validate() {
+/**
+ * 대상 channel 의 playlist 내 항목 조회 용 파라미터
+ */
+let paramPlaylistItems = {
+  ...paramDefault,
+
+  // 필터
+  playlistId: process.env.PLAY_LIST_ID,
+};
+
+/**
+ * 대상 channel 의 playlist 조회 용 파라미터
+ */
+let paramPlaylists = {
+  ...paramDefault,
+
+  // 필터
+  channelId: process.env.CHANNEL_ID,
+};
+
+/**
+ * 일반 검색용
+ */
+let paramSearch = {
+  ...paramDefault,
+
+  // 필터
+  relatedToVideoId: process.env.SEARCH_ID,
+
+  type: "video",
+};
+
+function validate(params) {
   // 파라미터 로딩 체크
-  const checkItems = ["key", "channelId", "playlistId"];
+  const checkItems = ["key"];
   let cause = [];
   for (let r of checkItems) {
     if (!params[r]) {
@@ -73,7 +103,7 @@ const getQuery = (source) => {
  * @param {Array} results 결과, 배열
  */
 async function find(url, params, pageToken, results = []) {
-  let cause = validate();
+  let cause = validate(params);
   if (cause) {
     throw new Error(cause);
   }
@@ -91,7 +121,11 @@ async function find(url, params, pageToken, results = []) {
 module.exports = {
   YT_PLAYLISTS,
   YT_PLAYLISTITEMS,
-  params,
+  YT_SEARCH,
+  // params,
+  paramPlaylistItems,
+  paramPlaylists,
+  paramSearch,
   getQuery,
   find,
 };

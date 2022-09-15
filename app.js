@@ -13,13 +13,17 @@ const params = process.argv.slice(2);
  */
 async function init() {
   let isError = true;
+  const match = {
+    list: "./src/playlists",
+    items: "./src/playlistItems",
+    search: "./src/search",
+  };
+
   if (params.length >= 1) {
-    if (params[0] == "list") {
-      const { search } = require("./src/playlists");
-      await search();
-      isError = false;
-    } else if (params[0] == "items") {
-      const { search } = require("./src/playlistItems");
+    // import 이후 수행할 작업 지정
+    let target = params[0];
+    if (Object.keys(match).includes(target)) {
+      const { search } = require(match[target]);
       await search();
       isError = false;
     }
@@ -28,7 +32,7 @@ async function init() {
   // 경고 문구 출력
   if (isError) {
     console.error(
-      "only available ::: $ node app list ... or ... $ node app items"
+      `only available ::: $ node app [${Object.keys(match).join(", ")}]`
     );
   }
 }

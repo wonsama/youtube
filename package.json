@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "list": "node app list",
-    "items": "node app items"
+    "items": "node app items",
+    "search": "node app search"
   },
   "repository": {
     "type": "git",

@@ -6,7 +6,7 @@ const fs = require("fs");
  * @param {string} filePath 결과 파일 저장 위치
  */
 async function search(filePath = "./output/list.txt") {
-  let res = await cm.find(cm.YT_PLAYLISTS, cm.params);
+  let res = await cm.find(cm.YT_PLAYLISTS, cm.paramPlaylists);
   res.sort((a, b) => a.snippet.title.localeCompare(b.snippet.title));
 
   let buf = [];
